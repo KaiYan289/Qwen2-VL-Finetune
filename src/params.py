@@ -13,6 +13,8 @@ class ModelArguments:
 
 @dataclass
 class TrainingArguments(HFTrainingArguments):
+    eval_strategy: str = field(default="steps")
+    eval_steps: int = field(default=20)
     cache_dir: Optional[str] = field(default=None)
     optim: str = field(default="adamw_torch")
     adam_beta1: float = field(default=0.9)
@@ -170,8 +172,11 @@ class GRPOArguments(GRPOConfigTRL):
 
 @dataclass
 class DataArguments:
-    data_path: str = field(
+    train_data_path: str = field(
         default=None, metadata={"help": "Path to the training data."}
+    )
+    eval_data_path: str = field(
+        default=None, metadata={"help": "Path to the validation data."}
     )
     lazy_preprocess: bool = False
     image_folder: Optional[str] = field(default=None)

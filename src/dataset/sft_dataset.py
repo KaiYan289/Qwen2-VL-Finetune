@@ -252,11 +252,15 @@ class DataCollatorForSupervisedDataset(object):
     
 def make_supervised_data_module(model_id, processor, data_args):
     """Make dataset and collator for supervised fine-tuning."""
-    sft_dataset = SupervisedDataset(
-        data_path=data_args.data_path, processor=processor, data_args=data_args, model_id=model_id
+    sft_train_dataset = SupervisedDataset(
+        data_path=data_args.train_data_path, processor=processor, data_args=data_args, model_id=model_id
+    )
+    sft_eval_dataset = SupervisedDataset(
+        data_path=data_args.eval_data_path, processor=processor, data_args=data_args, model_id=model_id
     )
     data_collator = DataCollatorForSupervisedDataset(pad_token_id=processor.tokenizer.pad_token_id)
 
-    return dict(train_dataset=sft_dataset,
-                eval_dataset=None,
-                data_collator=data_collator)
+    return dict(train_dataset=sft_train_dataset,
+                eval_dataset=sft_eval_dataset,
+                data_collator=data_collator
+                )

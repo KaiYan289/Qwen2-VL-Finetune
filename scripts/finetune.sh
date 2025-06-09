@@ -14,10 +14,12 @@ GRAD_ACCUM_STEPS=$((GLOBAL_BATCH_SIZE / (BATCH_PER_DEVICE * NUM_DEVICES)))
 export PYTHONPATH=src:$PYTHONPATH
 
 deepspeed src/train/train_sft.py \
+    --run_name COMFORT_SFT_160step \
     --use_liger True \
-    --deepspeed scripts/zero3_offload.json \
+    --deepspeed scripts/zero2.json \
     --model_id $MODEL_NAME \
-    --data_path /root/enhanced_data/v3_3d/final_synthesized_dataset.json \
+    --train_data_path /root/enhanced_data/v3_3d/sft_train_data.json \
+    --eval_data_path /root/enhanced_data/v3_3d/sft_eval_data.json \
     --image_folder  /root/enhanced_data/v3_3d/fig\
     --remove_unused_columns False \
     --freeze_vision_tower False \
@@ -44,6 +46,6 @@ deepspeed src/train/train_sft.py \
     --report_to wandb \
     --lazy_preprocess True \
     --save_strategy "steps" \
-    --save_steps 200 \
+    --save_steps 80 \
     --save_total_limit 10 \
     --dataloader_num_workers 4
